@@ -110,6 +110,12 @@ StudentsByCredential <- CurrentITStudentsInNS %>%
   group_by(`Credential type`, `Institution`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
+ggplot(data = StudentsByCredential, aes(x = `Credential type`, y = Total_Enroled, fill = `Credential type`)) + 
+  geom_col() +
+  ggtitle(label = "Total IT Students in NS by Credential Type (2019-2020)")+
+  theme(legend.position = "none")+
+  ylab("Total Enrolment")
+
 
 # IMMIGRATION STATUS
 
@@ -137,4 +143,21 @@ ggplot(data = AllStudentsByImm, aes(x = `Immigration status`, y = Total_Enroled,
         axis.ticks.x=element_blank())+
   ylab("Total Enrolment")
 
+AllYearsStudentsByImm <- Enrolment_2019_2020 %>%
+  filter(`Major Field of Study` == "Mathematics, computer and information sciences" 
+         & `Province of study` == "Nova Scotia") %>%
+  group_by(`Immigration status`, `Report year`, `Major Field of Study`) %>% 
+  summarise(Total_Enroled = sum(Enrolment))
+
+ggplot(data = AllYearsStudentsByImm, aes(x = `Immigration status`, y = Total_Enroled, fill = `Immigration status`)) + 
+  geom_col() +
+  facet_wrap(~ `Report year`)+
+  ggtitle(label = "IT Students in NS by Immigration Status & Year (2019-2020)")+
+  theme(legend.position = "bottom",
+        axis.title.x = element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  ylab("Total Enrolment")
+
+# REGISTRATION STATUS
 
