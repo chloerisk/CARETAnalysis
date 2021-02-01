@@ -12,6 +12,11 @@ swr = function(string, nwrap=30) {
 }
 swr = Vectorize(swr)
 
+swrSmall = function(string, nwrap=6) {
+  paste(strwrap(string, width=nwrap), collapse="\n")
+}
+swrSmall = Vectorize(swrSmall)
+
 # Change to TABLE$COLUMN = swr(SAME)
 
 AllStudentsByImm$`Major Field of Study` = swr(AllStudentsByImm$`Major Field of Study`)
@@ -29,21 +34,21 @@ AllCurrentStudentsInNS <- Enrolment_2019_2020 %>%
 
 # GENDER
 
-StudentsByGender <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByGender <- CurrentITStudentsInNS %>% 
   group_by(`Gender`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByGender, aes(x = `Gender`, y = Total_Enroled, fill = Gender)) + 
+ggplot(data = CurrentITStudentsByGender, aes(x = `Gender`, y = Total_Enroled, fill = Gender)) + 
   geom_col() +
   ggtitle(label = "Total IT Students in NS by Gender (2019-2020)") +
   theme(legend.position = "none")+
   ylab("Total Enrolment")
 
-StudentsByStatusAndGender <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByStatusAndGender <- CurrentITStudentsInNS %>% 
   group_by(`Registration status`, `Gender`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByStatusAndGender, aes(x = Gender, y = Total_Enroled, fill = Gender)) + 
+ggplot(data = CurrentITStudentsByStatusAndGender, aes(x = Gender, y = Total_Enroled, fill = Gender)) + 
   geom_col() +
   facet_wrap(~ `Registration status`)+
   ggtitle(label = "Total IT Students in NS by Gender and Registration Status (2019-2020)")+
@@ -53,11 +58,11 @@ ggplot(data = StudentsByStatusAndGender, aes(x = Gender, y = Total_Enroled, fill
 
 # INSTITUTION
 
-StudentsByUni <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByUni <- CurrentITStudentsInNS %>% 
   group_by(`Institution`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByUni, aes(x = Institution, y = Total_Enroled, fill = Institution)) + 
+ggplot(data = CurrentITStudentsByUni, aes(x = Institution, y = Total_Enroled, fill = Institution)) + 
   geom_col() +
   ggtitle(label = "Total IT Students in NS by Institution (2019-2020)")+
   theme(legend.position = "none")+
@@ -66,11 +71,11 @@ ggplot(data = StudentsByUni, aes(x = Institution, y = Total_Enroled, fill = Inst
 
 # LEVEL OF STUDY
 
-StudentsByLevel <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByLevel <- CurrentITStudentsInNS %>% 
   group_by(`Level of study`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByLevel, aes(x = `Level of study`, y = Total_Enroled, fill = `Level of study`)) + 
+ggplot(data = CurrentITStudentsByLevel, aes(x = `Level of study`, y = Total_Enroled, fill = `Level of study`)) + 
   geom_col() +
   ggtitle(label = "Total IT Students in NS by Level (2019-2020)")+
   theme(legend.position = "none")+
@@ -79,21 +84,23 @@ ggplot(data = StudentsByLevel, aes(x = `Level of study`, y = Total_Enroled, fill
 
 # AGE
 
-StudentsByAge <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByAge <- CurrentITStudentsInNS %>% 
   group_by(`Age group`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByAge, aes(x = `Age group`, y = Total_Enroled, fill = `Age group`)) + 
+ggplot(data = CurrentITStudentsByAge, aes(x = `Age group`, y = Total_Enroled, fill = `Age group`)) + 
   geom_col() +
   ggtitle(label = "Total IT Students in NS by Age (2019-2020)")+
   theme(legend.position = "none")+
   ylab("Total Enrolment")
 
-AllStudentsByAge <- AllCurrentStudentsInNS %>% 
+AllCurrentStudentsByAge <- AllCurrentStudentsInNS %>% 
   group_by(`Age group`, `Major Field of Study`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = AllStudentsByAge, aes(x = `Age group`, y = Total_Enroled, fill = `Age group`)) + 
+AllCurrentStudentsByAge$`Major Field of Study` = swr(AllCurrentStudentsByAge$`Major Field of Study`)
+
+ggplot(data = AllCurrentStudentsByAge, aes(x = `Age group`, y = Total_Enroled, fill = `Age group`)) + 
   geom_col() +
   facet_wrap(~ `Major Field of Study`)+
   ggtitle(label = "Students in NS by Age Group & Major (2019-2020)")+
@@ -104,36 +111,38 @@ ggplot(data = AllStudentsByAge, aes(x = `Age group`, y = Total_Enroled, fill = `
   ylab("Total Enrolment")
 
 
-# CREDENTIAL TYPE
+# REGISTRATION STATUS
 
-StudentsByCredential <- CurrentITStudentsInNS %>% 
-  group_by(`Credential type`, `Institution`) %>% 
+CurrentITStudentsByRegStatus <- CurrentITStudentsInNS %>% 
+  group_by(`Registration status`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByCredential, aes(x = `Credential type`, y = Total_Enroled, fill = `Credential type`)) + 
+ggplot(data = CurrentITStudentsByRegStatus, aes(x = `Registration status`, y = Total_Enroled, fill = `Registration status`)) + 
   geom_col() +
-  ggtitle(label = "Total IT Students in NS by Credential Type (2019-2020)")+
+  ggtitle(label = "Total IT Students in NS by Registration Status (2019-2020)")+
   theme(legend.position = "none")+
   ylab("Total Enrolment")
 
 
 # IMMIGRATION STATUS
 
-StudentsByImm <- CurrentITStudentsInNS %>% 
+CurrentITStudentsByImm <- CurrentITStudentsInNS %>% 
   group_by(`Immigration status`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = StudentsByImm, aes(x = `Immigration status`, y = Total_Enroled, fill = `Immigration status`)) + 
+ggplot(data = CurrentITStudentsByImm, aes(x = `Immigration status`, y = Total_Enroled, fill = `Immigration status`)) + 
   geom_col() +
   ggtitle(label = "Total IT Students in NS by Immigration Status (2019-2020)")+
   theme(legend.position = "none")+
   ylab("Total Enrolment")
 
-AllStudentsByImm <- AllCurrentStudentsInNS %>% 
+AllCurrentStudentsByImm <- AllCurrentStudentsInNS %>% 
   group_by(`Immigration status`, `Major Field of Study`) %>% 
   summarise(Total_Enroled = sum(Enrolment))
 
-ggplot(data = AllStudentsByImm, aes(x = `Immigration status`, y = Total_Enroled, fill = `Immigration status`)) + 
+AllCurrentStudentsByImm$`Major Field of Study` = swr(AllCurrentStudentsByImm$`Major Field of Study`)
+
+ggplot(data = AllCurrentStudentsByImm, aes(x = `Immigration status`, y = Total_Enroled, fill = `Immigration status`)) + 
   geom_col() +
   facet_wrap(~ `Major Field of Study`)+
   ggtitle(label = "Students in NS by Immigration Status & Major (2019-2020)")+
@@ -159,5 +168,43 @@ ggplot(data = AllYearsStudentsByImm, aes(x = `Immigration status`, y = Total_Enr
         axis.ticks.x=element_blank())+
   ylab("Total Enrolment")
 
-# REGISTRATION STATUS
+
+# OVERALL ENROLEMENT
+
+ITEnrolmentByYear <- Enrolment_2019_2020 %>%
+  filter(`Major Field of Study` == "Mathematics, computer and information sciences" 
+         & `Province of study` == "Nova Scotia") %>%
+  group_by(`Report year`, `Major Field of Study`) %>% 
+  summarise(Total_Enroled = sum(Enrolment))
+
+ggplot(data = ITEnrolmentByYear, aes(x = `Report year`, y = Total_Enroled, fill = `Report year`)) + 
+  geom_col() +
+  ggtitle(label = "Total IT Students in NS by Year")+
+  theme(legend.position = "none")+
+  ylab("Total Enrolment")
+
+
+AllYearsStudentsInNS <- Enrolment_2019_2020 %>% 
+  filter(`Province of study` == "Nova Scotia") %>%
+  group_by(`Report year`, `Major Field of Study`) %>% 
+  summarise(Total_Enroled = sum(Enrolment))
+
+ggplot(data = AllYearsStudentsInNS, aes(x = `Major Field of Study`, y = Total_Enroled, color = `Major Field of Study`)) + 
+  geom_point() +
+  facet_wrap(~ `Report year`)+
+  ggtitle(label = "NS Student Enrolment by Major and Year")+
+  theme(legend.position = "right",
+        axis.title.x = element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  ylab("Total Enrolment")
+
+
+ggplot(data = AllYearsStudentsInNS, aes(x = `Report year`, y = Total_Enroled, color = `Major Field of Study`, group = `Major Field of Study`)) + 
+  geom_point() +
+  geom_line() +
+  ggtitle(label = "NS Student Enrolment by Major and Year")+
+  theme(legend.position = "right")+
+  ylab("Total Enrolment")
+
 
